@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="height_main_card">148dp</dimen>
+    <dimen name="padding_main_screen">16dp</dimen>
+    <dimen name="geolocation_width">15dp</dimen>
+    <dimen name="geolocation_height">18dp</dimen>
+    <dimen name="user_photo_size">44dp</dimen>
+    <dimen name="padding_between_cards">8dp</dimen>
+</resources>

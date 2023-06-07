@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">EffectiveClub</string>
+    <string name="geolocation_desc">geolocation</string>
+    <string name="user_photo_desc">user photo</string>
 </resources>
