@@ -34,7 +34,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
@@ -50,7 +49,8 @@ fun DishesScreen(
     category: String,
     categories: MutableList<String>,
     selected:MutableList<Boolean>,
-    navigateUp:()->Unit
+    navigateUp:()->Unit,
+    navigateToDialog: () -> Unit
 ){
     Scaffold (
         topBar = {
@@ -97,7 +97,8 @@ fun DishesScreen(
                     paddingValues = paddingValues,
                     categories = categories,
                     selected = selected,
-                    viewModel = viewModel
+                    viewModel = viewModel,
+                    navigateToDialog = {navigateToDialog()}
                 )
             }
             is DishesUIState.Loading -> {
@@ -117,18 +118,25 @@ fun DishesContent(
     paddingValues: PaddingValues,
     categories: MutableList<String>,
     selected: MutableList<Boolean>,
-    viewModel: DishesViewModel? = null,
+    viewModel: DishesViewModel,
+    navigateToDialog:()->Unit
 ){
+
     Column(modifier = modifier.fillMaxSize()) {
         DishesFilter(
-            categories = mutableListOf("Все меню", "С рисом", "Салаты", "С рыбой"),
+            //categories = mutableListOf("Все меню", "С рисом", "Салаты", "С рыбой"),
+            categories = categories,
             selected = selected,
             viewModel = viewModel
         )
         dishesList?.let {
             DishGrid(
                 dishes = it,
-                paddingValues = paddingValues
+                paddingValues = paddingValues,
+                onCardClick = {dish->
+                    viewModel.updateCurrentDish(dish = dish)
+                    navigateToDialog()
+                }
             )
         }
     }
@@ -140,7 +148,7 @@ fun DishesFilter(
     modifier: Modifier = Modifier,
     categories: MutableList<String>,
     selected: MutableList<Boolean>,
-    viewModel: DishesViewModel? = null
+    viewModel: DishesViewModel
 ){
     LazyRow(modifier = modifier.fillMaxWidth()){
         items(categories){item ->
@@ -148,7 +156,7 @@ fun DishesFilter(
                 modifier = Modifier.padding(start = 5.dp),
                 selected = selected[categories.indexOf(item)],
                 onClick = {
-                    viewModel?.selectUpdate(item = item)
+                    viewModel.selectUpdate(item = item)
                 },
                 label = {
                     Text(text = item)
@@ -161,30 +169,38 @@ fun DishesFilter(
 fun DishGrid(
     modifier: Modifier = Modifier,
     dishes: Dishes,
-    paddingValues: PaddingValues
+    paddingValues: PaddingValues,
+    onCardClick: (Dish) -> Unit
 ) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(3),
         verticalArrangement = Arrangement.spacedBy(8.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
-        contentPadding = paddingValues
+        contentPadding = paddingValues,
+        modifier = modifier
     ){
         items(dishes.dishes){dish ->
             DishCard(
-                item = dish
+                item = dish,
+                onCardClick = onCardClick
             )
         }
     }
 }
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DishCard(
     modifier: Modifier = Modifier,
-    item: Dish
+    item: Dish,
+    onCardClick:(Dish) -> Unit
 ) {
     Card(
         modifier = modifier
             .height(190.dp)
-            .width(109.dp)
+            .width(109.dp),
+        onClick = {
+            onCardClick(item)
+        }
     ) {
         Box(
             modifier = modifier.size(109.dp),
@@ -206,7 +222,7 @@ fun DishCard(
     }
 }
 
-@Preview(showBackground = true)
+/*@Preview(showBackground = true)
 @Composable
 fun PreviewChips(){
     //DishesFilter(
@@ -219,4 +235,4 @@ fun PreviewChips(){
         selected = mutableListOf(false, false, false, false)
     )
 }
-
+*/

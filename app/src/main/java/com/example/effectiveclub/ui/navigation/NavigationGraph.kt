@@ -9,7 +9,9 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.effectiveclub.data.categories.Dish
 import com.example.effectiveclub.ui.AppViewModelProvider
+import com.example.effectiveclub.ui.dish.DishItem
 import com.example.effectiveclub.ui.dishes.DishesScreen
 import com.example.effectiveclub.ui.dishes.DishesViewModel
 import com.example.effectiveclub.ui.main.MainScreen
@@ -19,6 +21,7 @@ import com.example.effectiveclub.ui.main.MainViewModel
 enum class NavigationGraph (title:String){
     Main(title = "main"),
     Categories(title = "categories"),
+    DialogDish(title = "dialogDish")
 }
 
 
@@ -35,6 +38,7 @@ fun EffectiveClubNavigationGraph(
 ){
     val categories by dishesViewModel.categoryChip.collectAsState()
     val selected by dishesViewModel.select.collectAsState()
+    val dish by dishesViewModel.currentDish.collectAsState()
     NavHost(
         navController = navController,
         startDestination = NavigationGraph.Main.name,
@@ -55,6 +59,17 @@ fun EffectiveClubNavigationGraph(
                 category = "Азиатская кухня",
                 categories = categories as MutableList<String>,
                 selected = selected as MutableList<Boolean>,
+                navigateUp = {
+                    navController.navigateUp()
+                },
+                navigateToDialog = {
+                    navController.navigate(route = NavigationGraph.DialogDish.name)
+                }
+            )
+        }
+        composable(route = NavigationGraph.DialogDish.name){
+            DishItem(
+                dish = dish,
                 navigateUp = {
                     navController.navigateUp()
                 }
