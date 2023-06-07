@@ -12,11 +12,11 @@ data class Dish(
     @SerialName("price")
     val price: Int?,
     @SerialName("weight")
-    val weight: Int,
+    val weight: Int?,
     @SerialName("description")
-    val description:Int,
+    val description:String?,
     @SerialName("image_url")
-    val imageUrl:String?,
+    val imageUrl:String? = null,
     @SerialName("tegs")
     val tags: List<String>
 )

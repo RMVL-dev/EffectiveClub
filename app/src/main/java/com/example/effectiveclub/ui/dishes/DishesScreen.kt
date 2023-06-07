@@ -1,16 +1,44 @@
 package com.example.effectiveclub.ui.dishes
 
+
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FilterChip
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.example.effectiveclub.R
 import com.example.effectiveclub.data.categories.Dish
 import com.example.effectiveclub.data.categories.Dishes
 
@@ -19,16 +47,58 @@ import com.example.effectiveclub.data.categories.Dishes
 fun DishesScreen(
     modifier: Modifier = Modifier,
     viewModel: DishesViewModel,
-    category: String
+    category: String,
+    categories: MutableList<String>,
+    selected:MutableList<Boolean>,
+    navigateUp:()->Unit
 ){
     Scaffold (
         topBar = {
-
+            TopAppBar(
+                modifier = modifier,
+                title = {
+                    Row(modifier = modifier
+                        .fillMaxWidth(),
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Spacer(modifier = Modifier.weight(1f))
+                        Text(
+                            text = category,
+                            modifier = Modifier
+                                .weight(4f)
+                                .padding(start = 20.dp)
+                        )
+                        Image(
+                            painter = painterResource(id = R.drawable.user),
+                            contentDescription = "",
+                            modifier = Modifier
+                                .size(44.dp)
+                                .weight(1f)
+                        )
+                    }
+                },
+                navigationIcon = {
+                    IconButton(onClick = navigateUp) {
+                        Icon(
+                            imageVector = Icons.Filled.ArrowBack,
+                            contentDescription = ""
+                        )
+                    }
+                }
+            )
         }
             ) {paddingValues ->
         when(viewModel.dishesUiState){
             is DishesUIState.Success -> {
-
+                DishesContent(
+                    dishesList =
+                    (viewModel.dishesUiState as DishesUIState.Success).dishes,
+                    paddingValues = paddingValues,
+                    categories = categories,
+                    selected = selected,
+                    viewModel = viewModel
+                )
             }
             is DishesUIState.Loading -> {
 
@@ -41,30 +111,112 @@ fun DishesScreen(
 }
 
 @Composable
-fun DishGrid(
+fun DishesContent(
     modifier: Modifier = Modifier,
-    dishes: Dishes
+    dishesList:Dishes? = null,
+    paddingValues: PaddingValues,
+    categories: MutableList<String>,
+    selected: MutableList<Boolean>,
+    viewModel: DishesViewModel? = null,
 ){
-
-}
-
-@Composable
-fun DishCard(
-    modifier:Modifier = Modifier,
-    item:Dish
-){
-    Card(
-        modifier = modifier
-    ) {
-        AsyncImage(
-            model = ImageRequest.Builder(LocalContext.current)
-                .data(item.imageUrl)
-                .crossfade(enable = true)
-                .build(),
-            contentDescription = item.name
+    Column(modifier = modifier.fillMaxSize()) {
+        DishesFilter(
+            categories = mutableListOf("Все меню", "С рисом", "Салаты", "С рыбой"),
+            selected = selected,
+            viewModel = viewModel
         )
-        item.name?.let { Text(text = it) }
+        dishesList?.let {
+            DishGrid(
+                dishes = it,
+                paddingValues = paddingValues
+            )
+        }
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun DishesFilter(
+    modifier: Modifier = Modifier,
+    categories: MutableList<String>,
+    selected: MutableList<Boolean>,
+    viewModel: DishesViewModel? = null
+){
+    LazyRow(modifier = modifier.fillMaxWidth()){
+        items(categories){item ->
+            FilterChip(
+                modifier = Modifier.padding(start = 5.dp),
+                selected = selected[categories.indexOf(item)],
+                onClick = {
+                    viewModel?.selectUpdate(item = item)
+                },
+                label = {
+                    Text(text = item)
+                }
+            )
+        }
+    }
+}
+@Composable
+fun DishGrid(
+    modifier: Modifier = Modifier,
+    dishes: Dishes,
+    paddingValues: PaddingValues
+) {
+    LazyVerticalGrid(
+        columns = GridCells.Fixed(3),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        contentPadding = paddingValues
+    ){
+        items(dishes.dishes){dish ->
+            DishCard(
+                item = dish
+            )
+        }
+    }
+}
+@Composable
+fun DishCard(
+    modifier: Modifier = Modifier,
+    item: Dish
+) {
+    Card(
+        modifier = modifier
+            .height(190.dp)
+            .width(109.dp)
+    ) {
+        Box(
+            modifier = modifier.size(109.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            AsyncImage(
+                model = ImageRequest.Builder(LocalContext.current)
+                    .data(item.imageUrl)
+                    .crossfade(enable = true)
+                    .build(),
+                contentDescription = item.name,
+                modifier = Modifier.padding(start = 20.dp)
+            )
+        }
+        item.name?.let { Text(
+            text = it,
+            modifier = Modifier.padding(start = 10.dp)
+        ) }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PreviewChips(){
+    //DishesFilter(
+    //    categories = mutableListOf("Все меню", "С рисом", "Салаты", "С рыбой"),
+    //    selected = mutableListOf(false, false, false, false)
+    //)
+    DishesContent(
+        paddingValues = PaddingValues(10.dp),
+        categories = mutableListOf("Все меню", "С рисом", "Салаты", "С рыбой"),
+        selected = mutableListOf(false, false, false, false)
+    )
+}
 

@@ -28,7 +28,8 @@ import com.example.effectiveclub.data.main.Categories
 @Composable
 fun MainScreen(
     modifier: Modifier = Modifier,
-    viewModel: MainViewModel
+    viewModel: MainViewModel,
+    navigationToCategories:()->Unit
 ){
     Column(modifier = modifier
         .padding(
@@ -39,7 +40,10 @@ fun MainScreen(
         TopMainBar()
         when(viewModel.mainUistate){
             is MainUIState.Success ->{
-                MainList(itemList = (viewModel.mainUistate as MainUIState.Success).mainlist.categories)
+                MainList(
+                    itemList = (viewModel.mainUistate as MainUIState.Success).mainlist.categories,
+                    navigationToCategories = {navigationToCategories()}
+                )
             }
             is MainUIState.Error ->{
 
@@ -54,7 +58,8 @@ fun MainScreen(
 @Composable
 fun MainList(
     modifier:Modifier = Modifier,
-    itemList:List<Categories>
+    itemList:List<Categories>,
+    navigationToCategories:()->Unit
 ){
 
     LazyColumn(
@@ -63,7 +68,7 @@ fun MainList(
     ){
         items(itemList){
             MainCard(item = it) {
-
+                navigationToCategories()
             }
         }
     }
@@ -112,7 +117,7 @@ fun MainCard(
 
     Card(
         modifier = modifier.padding(top = dimensionResource(id = R.dimen.padding_between_cards)),
-        onClick = onCardClick,
+        onClick = {onCardClick()},
     ) {
         Box(modifier = modifier) {
             AsyncImage(
