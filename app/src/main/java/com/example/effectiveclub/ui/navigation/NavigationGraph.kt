@@ -7,8 +7,10 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.effectiveclub.ui.AppViewModelProvider
-import com.example.effectiveclub.ui.Main.MainScreen
-import com.example.effectiveclub.ui.Main.MainViewModel
+import com.example.effectiveclub.ui.dishes.DishesScreen
+import com.example.effectiveclub.ui.dishes.DishesViewModel
+import com.example.effectiveclub.ui.main.MainScreen
+import com.example.effectiveclub.ui.main.MainViewModel
 
 
 enum class NavigationGraph (title:String){
@@ -23,6 +25,9 @@ fun EffectiveClubNavigationGraph(
     navController: NavHostController,
     mainViewModel: MainViewModel = viewModel(
         factory = AppViewModelProvider.Factory
+    ),
+    dishesViewModel:DishesViewModel = viewModel(
+        factory = AppViewModelProvider.Factory
     )
 ){
 
@@ -34,7 +39,7 @@ fun EffectiveClubNavigationGraph(
             MainScreen(viewModel = mainViewModel)
         }
         composable(route = NavigationGraph.Categories.name){
-
+            DishesScreen(viewModel = dishesViewModel)
         }
     }
 }

@@ -1,4 +1,4 @@
-package com.example.effectiveclub.ui.Main
+package com.example.effectiveclub.ui.main
 
 import com.example.effectiveclub.data.main.Main
 

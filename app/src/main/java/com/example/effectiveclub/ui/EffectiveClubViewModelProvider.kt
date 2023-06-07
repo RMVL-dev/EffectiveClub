@@ -5,12 +5,16 @@ import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.effectiveclub.EffectiveClubApplication
-import com.example.effectiveclub.ui.Main.MainViewModel
+import com.example.effectiveclub.ui.dishes.DishesViewModel
+import com.example.effectiveclub.ui.main.MainViewModel
 
 object AppViewModelProvider{
     val Factory = viewModelFactory{
         initializer {
-            MainViewModel(mainNetworkRepository = effectiveClubApplication().container.appRepository)
+            MainViewModel(mainNetworkRepository = effectiveClubApplication().container.mainRepository)
+        }
+        initializer {
+            DishesViewModel(dishesRepository = effectiveClubApplication().container.dishesRepository)
         }
     }
 }

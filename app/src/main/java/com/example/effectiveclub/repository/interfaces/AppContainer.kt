@@ -1,5 +1,6 @@
 package com.example.effectiveclub.repository.interfaces
 
 interface AppContainer {
-    val appRepository:AppRepository
+    val mainRepository:MainRepository
+    val dishesRepository:DishesRepository
 }
