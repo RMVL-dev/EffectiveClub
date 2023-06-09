@@ -9,7 +9,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.effectiveclub.data.categories.Dish
 import com.example.effectiveclub.ui.AppViewModelProvider
 import com.example.effectiveclub.ui.dish.DishItem
 import com.example.effectiveclub.ui.dishes.DishesScreen

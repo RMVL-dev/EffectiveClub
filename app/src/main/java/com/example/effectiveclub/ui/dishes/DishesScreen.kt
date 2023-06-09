@@ -2,6 +2,7 @@ package com.example.effectiveclub.ui.dishes
 
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -26,6 +27,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -54,7 +56,14 @@ fun DishesScreen(
 ){
     Scaffold (
         topBar = {
-            TopAppBar(
+            TopBarDishes(
+                categories = categories,
+                selected = selected,
+                viewModel = viewModel,
+                category = category) {
+                navigateUp()
+            }
+            /*TopAppBar(
                 modifier = modifier,
                 title = {
                     Row(modifier = modifier
@@ -86,7 +95,7 @@ fun DishesScreen(
                         )
                     }
                 }
-            )
+            )*/
         }
             ) {paddingValues ->
         when(viewModel.dishesUiState){
@@ -111,6 +120,50 @@ fun DishesScreen(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun TopBarDishes(
+    modifier: Modifier = Modifier,
+    categories: MutableList<String>,
+    selected: MutableList<Boolean>,
+    viewModel: DishesViewModel,
+    category: String,
+    navigateUp:()->Unit
+){
+    Column(modifier = modifier) {
+        Row(
+            modifier = modifier
+                .fillMaxWidth()
+                .background(color = MaterialTheme.colorScheme.primary),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            IconButton(onClick = navigateUp) {
+                Icon(
+                    imageVector = Icons.Filled.ArrowBack,
+                    contentDescription = ""
+                )
+            }
+            Spacer(modifier = Modifier.weight(1f))
+            Text(
+                text = category,
+                modifier = Modifier
+                    .weight(4f)
+                    .padding(start = 20.dp)
+            )
+            Image(
+                painter = painterResource(id = R.drawable.user),
+                contentDescription = "",
+                modifier = Modifier
+                    .size(44.dp)
+                    .weight(1f)
+            )
+        }
+        DishesFilter(categories = categories, selected = selected, viewModel = viewModel)
+    }
+}
+
+
 @Composable
 fun DishesContent(
     modifier: Modifier = Modifier,
@@ -122,13 +175,13 @@ fun DishesContent(
     navigateToDialog:()->Unit
 ){
 
-    Column(modifier = modifier.fillMaxSize()) {
-        DishesFilter(
+    //Column(modifier = modifier.fillMaxSize()) {
+        /*DishesFilter(
             //categories = mutableListOf("Все меню", "С рисом", "Салаты", "С рыбой"),
             categories = categories,
             selected = selected,
             viewModel = viewModel
-        )
+        )*/
         dishesList?.let {
             DishGrid(
                 dishes = it,
@@ -139,7 +192,7 @@ fun DishesContent(
                 }
             )
         }
-    }
+    //}
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
