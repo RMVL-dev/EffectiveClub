@@ -1,4 +1,4 @@
-package com.example.effectiveclub.repository.interfaces
+package com.example.effectiveclub.repositories.network.interfaces
 
 import com.example.effectiveclub.data.categories.Dishes
 

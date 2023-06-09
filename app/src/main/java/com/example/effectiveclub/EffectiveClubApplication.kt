@@ -1,8 +1,8 @@
 package com.example.effectiveclub
 
 import android.app.Application
-import com.example.effectiveclub.repository.classes.DefaultAppContainer
-import com.example.effectiveclub.repository.interfaces.AppContainer
+import com.example.effectiveclub.repositories.appcontainer.DefaultAppContainer
+import com.example.effectiveclub.repositories.appcontainer.AppContainer
 
 class EffectiveClubApplication:Application() {
 
@@ -10,6 +10,6 @@ class EffectiveClubApplication:Application() {
 
     override fun onCreate() {
         super.onCreate()
-        container = DefaultAppContainer()
+        container = DefaultAppContainer(context = this)
     }
 }

@@ -5,7 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.effectiveclub.repository.interfaces.MainRepository
+import com.example.effectiveclub.repositories.network.interfaces.MainRepository
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.io.IOException

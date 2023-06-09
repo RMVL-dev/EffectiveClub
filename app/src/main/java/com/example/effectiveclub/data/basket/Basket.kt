@@ -6,10 +6,10 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "basket")
 data class Basket(
     @PrimaryKey(autoGenerate = true)
-    val id: Int,
-    val name: String,
-    val price: Int,
-    val weight: Int,
-    val imageUrl: String,
-    val amount: Int
+    val id: Int = 0,
+    val name: String = "",
+    val price: Int = 0,
+    val weight: Int = 0,
+    val imageUrl: String = "",
+    val amount: Int = 0
 )

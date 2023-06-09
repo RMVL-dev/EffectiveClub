@@ -5,6 +5,7 @@ import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.effectiveclub.EffectiveClubApplication
+import com.example.effectiveclub.ui.basket.BasketViewModel
 import com.example.effectiveclub.ui.dishes.DishesViewModel
 import com.example.effectiveclub.ui.main.MainViewModel
 
@@ -15,6 +16,9 @@ object AppViewModelProvider{
         }
         initializer {
             DishesViewModel(dishesRepository = effectiveClubApplication().container.dishesRepository)
+        }
+        initializer {
+            BasketViewModel(itemsRepository = effectiveClubApplication().container.basketRepository)
         }
     }
 }

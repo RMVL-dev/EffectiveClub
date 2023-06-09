@@ -1,14 +1,12 @@
 package com.example.effectiveclub.ui.dishes
 
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.currentRecomposeScope
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.effectiveclub.data.categories.Dish
-import com.example.effectiveclub.repository.interfaces.DishesRepository
+import com.example.effectiveclub.repositories.network.interfaces.DishesRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow

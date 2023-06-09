@@ -42,7 +42,7 @@ fun DishItem(
     modifier: Modifier = Modifier,
     dish:Dish,
     navigateUp:()->Unit,
-    addToBasket:()->Unit = {},
+    addToBasket:(dish:Dish)->Unit = {},
 ){
     Box(modifier = modifier
         .height(450.dp)
@@ -88,7 +88,9 @@ fun DishItem(
                 }
                 dish.description?.let { Text(text = it) }
                 Button(
-                    onClick = { addToBasket() },
+                    onClick = {
+                        addToBasket(dish)
+                              },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(8.dp)
