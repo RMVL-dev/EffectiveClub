@@ -20,6 +20,9 @@ interface ItemDAO {
     @Update
     suspend fun delete(dish: Basket)
 
+    @Query("delete from basket")
+    suspend fun deleteAll()
+
     @Query("select * from basket where id = :id")
     fun getItem(id:Int):Flow<Basket>
 

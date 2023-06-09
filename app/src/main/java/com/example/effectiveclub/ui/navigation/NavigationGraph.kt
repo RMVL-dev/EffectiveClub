@@ -47,7 +47,7 @@ fun EffectiveClubNavigationGraph(
     val coroutineScope = rememberCoroutineScope()
     NavHost(
         navController = navController,
-        startDestination = NavigationGraph.Categories.name,
+        startDestination = NavigationGraph.Main.name,
     ){
         composable(route = NavigationGraph.Main.name){
             MainScreen(

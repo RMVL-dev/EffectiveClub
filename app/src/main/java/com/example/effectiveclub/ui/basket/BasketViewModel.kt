@@ -11,13 +11,8 @@ import com.example.effectiveclub.repositories.database.ItemRepository
 
 class BasketViewModel(private val itemsRepository: ItemRepository):ViewModel() {
 
-    var dish by mutableStateOf(Basket())
-        private set
-
-
 
     suspend fun saveItem(dish:Dish){
-
         dish.name?.let {
             dish.weight?.let { it1 ->
                 dish.price?.let { it2 ->
@@ -40,9 +35,6 @@ class BasketViewModel(private val itemsRepository: ItemRepository):ViewModel() {
 
     }
 
-}
 
-data class BasketUiState(
-    val outOfStock:Boolean = true,
-    val basket: Basket = Basket()
-)
+
+}
