@@ -17,6 +17,12 @@ class MainViewModel(
     var mainUistate:MainUIState by mutableStateOf(MainUIState.Loading)
         private set
 
+    var mainIsShowing:Boolean by mutableStateOf(true)
+        private set
+
+    fun changePage(){
+        mainIsShowing = !mainIsShowing
+    }
     init {
         getMainList()
     }

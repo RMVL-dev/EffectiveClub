@@ -41,6 +41,7 @@ class DishesViewModel(
 
     init {
         getDishesList()
+        //updateCategoryList((dishesUiState as DishesUIState.Success).dishes.dishes)
     }
 
     fun updateCurrentDish(dish:Dish){
@@ -60,7 +61,7 @@ class DishesViewModel(
     fun selectUpdate(item:String){
 
         for (i in 0 until _select.value.size)
-            _select.value[i]=false
+            _select.value[i]= !_select.value[i]
 
         if (_categoryChip.value.contains(item)){
             _select.value[_categoryChip.value.indexOf(item)] = true

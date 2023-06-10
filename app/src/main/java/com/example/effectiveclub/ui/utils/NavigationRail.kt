@@ -1,4 +1,4 @@
-package com.example.effectiveclub.navrail
+package com.example.effectiveclub.ui.utils
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes

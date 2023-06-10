@@ -1,6 +1,7 @@
 package com.example.effectiveclub.ui.main
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -21,6 +22,7 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.effectiveclub.R
@@ -35,9 +37,9 @@ fun MainScreen(
 ){
     Column(modifier = modifier
         .padding(
-            dimensionResource(id = R.dimen.padding_main_screen)
+           paddingValues = paddingValues
         )
-        .fillMaxWidth()
+        .fillMaxWidth(),
     ) {
         TopMainBar()
         when(viewModel.mainUistate){
@@ -83,9 +85,12 @@ fun TopMainBar(
 ){
     Row(modifier = modifier
         .fillMaxWidth()
+        .padding(8.dp)
     ) {
         Image(
-            painter = painterResource(id = R.drawable.placeholder),
+            painter = painterResource(
+                id = R.drawable.placeholder
+            ),
             contentDescription = stringResource(R.string.geolocation_desc),
             modifier = Modifier
                 .size(

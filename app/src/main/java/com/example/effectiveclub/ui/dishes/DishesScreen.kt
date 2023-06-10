@@ -1,6 +1,7 @@
 package com.example.effectiveclub.ui.dishes
 
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -22,7 +23,6 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
@@ -31,7 +31,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -43,63 +42,18 @@ import coil.request.ImageRequest
 import com.example.effectiveclub.R
 import com.example.effectiveclub.data.categories.Dish
 import com.example.effectiveclub.data.categories.Dishes
-import com.example.effectiveclub.navrail.NavigationRailClub
+import com.example.effectiveclub.ui.utils.TopBarDishes
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DishesScreen(
     modifier: Modifier = Modifier,
     viewModel: DishesViewModel,
-    category: String,
     categories: MutableList<String>,
     selected:MutableList<Boolean>,
-    navigateUp:()->Unit,
-    navigateToDialog: () -> Unit
+    navigateToDialog: () -> Unit,
+    paddingValues: PaddingValues
 ){
-    Scaffold (
-        topBar = {
-            TopBarDishes(
-                categories = categories,
-                selected = selected,
-                viewModel = viewModel,
-                category = category) {
-                navigateUp()
-            }
-            /*TopAppBar(
-                modifier = modifier,
-                title = {
-                    Row(modifier = modifier
-                        .fillMaxWidth(),
-                        horizontalArrangement = Arrangement.Center,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Spacer(modifier = Modifier.weight(1f))
-                        Text(
-                            text = category,
-                            modifier = Modifier
-                                .weight(4f)
-                                .padding(start = 20.dp)
-                        )
-                        Image(
-                            painter = painterResource(id = R.drawable.user),
-                            contentDescription = "",
-                            modifier = Modifier
-                                .size(44.dp)
-                                .weight(1f)
-                        )
-                    }
-                },
-                navigationIcon = {
-                    IconButton(onClick = navigateUp) {
-                        Icon(
-                            imageVector = Icons.Filled.ArrowBack,
-                            contentDescription = ""
-                        )
-                    }
-                }
-            )*/
-        }
-            ) {paddingValues ->
         when(viewModel.dishesUiState){
             is DishesUIState.Success -> {
                 DishesContent(
@@ -119,52 +73,7 @@ fun DishesScreen(
 
             }
         }
-    }
 }
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun TopBarDishes(
-    modifier: Modifier = Modifier,
-    categories: MutableList<String>,
-    selected: MutableList<Boolean>,
-    viewModel: DishesViewModel,
-    category: String,
-    navigateUp:()->Unit
-){
-    Column(modifier = modifier) {
-        Row(
-            modifier = modifier
-                .fillMaxWidth()
-                .background(color = MaterialTheme.colorScheme.primary),
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            IconButton(onClick = navigateUp) {
-                Icon(
-                    imageVector = Icons.Filled.ArrowBack,
-                    contentDescription = ""
-                )
-            }
-            Spacer(modifier = Modifier.weight(1f))
-            Text(
-                text = category,
-                modifier = Modifier
-                    .weight(4f)
-                    .padding(start = 20.dp)
-            )
-            Image(
-                painter = painterResource(id = R.drawable.user),
-                contentDescription = "",
-                modifier = Modifier
-                    .size(44.dp)
-                    .weight(1f)
-            )
-        }
-        DishesFilter(categories = categories, selected = selected, viewModel = viewModel)
-    }
-}
-
 
 @Composable
 fun DishesContent(
@@ -177,24 +86,26 @@ fun DishesContent(
     navigateToDialog:()->Unit
 ){
 
-    //Column(modifier = modifier.fillMaxSize()) {
-        /*DishesFilter(
-            //categories = mutableListOf("Все меню", "С рисом", "Салаты", "С рыбой"),
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .padding(paddingValues)
+    ) {
+        DishesFilter(
             categories = categories,
             selected = selected,
             viewModel = viewModel
-        )*/
+        )
         dishesList?.let {
             DishGrid(
                 dishes = it,
-                paddingValues = paddingValues,
                 onCardClick = {dish->
                     viewModel.updateCurrentDish(dish = dish)
                     navigateToDialog()
                 }
             )
         }
-    //}
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -211,7 +122,9 @@ fun DishesFilter(
                 modifier = Modifier.padding(start = 5.dp),
                 selected = selected[categories.indexOf(item)],
                 onClick = {
+                    Log.d("Change","${selected[categories.indexOf(item)]}")
                     viewModel.selectUpdate(item = item)
+                    Log.d("Change","${selected[categories.indexOf(item)]}")
                 },
                 label = {
                     Text(text = item)
@@ -224,14 +137,12 @@ fun DishesFilter(
 fun DishGrid(
     modifier: Modifier = Modifier,
     dishes: Dishes,
-    paddingValues: PaddingValues,
     onCardClick: (Dish) -> Unit
 ) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(3),
         verticalArrangement = Arrangement.spacedBy(8.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
-        contentPadding = paddingValues,
         modifier = modifier
     ){
         items(dishes.dishes){dish ->
@@ -276,18 +187,3 @@ fun DishCard(
         ) }
     }
 }
-
-/*@Preview(showBackground = true)
-@Composable
-fun PreviewChips(){
-    //DishesFilter(
-    //    categories = mutableListOf("Все меню", "С рисом", "Салаты", "С рыбой"),
-    //    selected = mutableListOf(false, false, false, false)
-    //)
-    DishesContent(
-        paddingValues = PaddingValues(10.dp),
-        categories = mutableListOf("Все меню", "С рисом", "Салаты", "С рыбой"),
-        selected = mutableListOf(false, false, false, false)
-    )
-}
-*/
