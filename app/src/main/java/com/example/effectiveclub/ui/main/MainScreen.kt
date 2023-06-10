@@ -3,6 +3,7 @@ package com.example.effectiveclub.ui.main
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -29,7 +30,8 @@ import com.example.effectiveclub.data.main.Categories
 fun MainScreen(
     modifier: Modifier = Modifier,
     viewModel: MainViewModel,
-    navigationToCategories:()->Unit
+    navigationToCategories:()->Unit,
+    paddingValues: PaddingValues
 ){
     Column(modifier = modifier
         .padding(

@@ -42,7 +42,7 @@ fun DishItem(
     modifier: Modifier = Modifier,
     dish:Dish,
     navigateUp:()->Unit,
-    addToBasket:(dish:Dish)->Unit = {},
+    addToBasket:(dish:Dish)->Unit = {}
 ){
     Box(modifier = modifier
         .height(450.dp)
@@ -61,7 +61,7 @@ fun DishItem(
                     modifier = modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.End
                 ) {
-                    IconButton(onClick = { /*TODO*/ }) {
+                    IconButton(onClick = { }) {
                         Icon(imageVector = Icons.Filled.Favorite, contentDescription = "")
                     }
                     IconButton(onClick = {navigateUp()}) {

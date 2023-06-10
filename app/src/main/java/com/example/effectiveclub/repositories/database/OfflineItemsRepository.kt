@@ -5,6 +5,7 @@ import com.example.effectiveclub.data.basket.ItemDAO
 import kotlinx.coroutines.flow.Flow
 
 class OfflineItemsRepository(private val itemDAO: ItemDAO): ItemRepository {
+    override suspend fun deleteAll() = itemDAO.deleteAll()
 
     override fun getAllItemsStream(): Flow<List<Basket>>  = itemDAO.getAllBasket()
 

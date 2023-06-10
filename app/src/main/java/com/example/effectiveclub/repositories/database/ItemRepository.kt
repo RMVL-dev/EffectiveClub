@@ -5,6 +5,8 @@ import kotlinx.coroutines.flow.Flow
 
 interface ItemRepository {
 
+    suspend fun deleteAll()
+
     fun getAllItemsStream(): Flow<List<Basket>>
 
     fun getItemStream(id:Int):Flow<Basket>

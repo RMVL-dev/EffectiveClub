@@ -3,4 +3,8 @@
     <string name="geolocation_desc">geolocation</string>
     <string name="user_photo_desc">user photo</string>
     <string name="add_to_basket">Добавить в корзину</string>
+    <string name="main">Главная</string>
+    <string name="search">Поиск</string>
+    <string name="basket">Корзина</string>
+    <string name="account">Аккаунт</string>
 </resources>

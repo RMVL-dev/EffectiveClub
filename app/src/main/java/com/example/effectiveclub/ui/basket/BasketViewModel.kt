@@ -11,6 +11,10 @@ import com.example.effectiveclub.repositories.database.ItemRepository
 
 class BasketViewModel(private val itemsRepository: ItemRepository):ViewModel() {
 
+    suspend fun deleteAllItems(){
+        itemsRepository.deleteAll()
+    }
+
 
     suspend fun saveItem(dish:Dish){
         dish.name?.let {

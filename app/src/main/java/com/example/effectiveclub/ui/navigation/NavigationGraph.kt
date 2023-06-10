@@ -1,5 +1,7 @@
 package com.example.effectiveclub.ui.navigation
 
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -10,6 +12,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.effectiveclub.navrail.NavigationRailClub
 import com.example.effectiveclub.ui.AppViewModelProvider
 import com.example.effectiveclub.ui.basket.BasketViewModel
 import com.example.effectiveclub.ui.dish.DishItem
@@ -23,10 +26,12 @@ import kotlinx.coroutines.launch
 enum class NavigationGraph (title:String){
     Main(title = "main"),
     Categories(title = "categories"),
-    DialogDish(title = "dialogDish")
+    DialogDish(title = "dialogDish"),
+    Basket(title = "basket")
 }
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EffectiveClubNavigationGraph(
     modifier: Modifier = Modifier,
@@ -41,50 +46,69 @@ fun EffectiveClubNavigationGraph(
         factory = AppViewModelProvider.Factory
     )
 ){
-    val categories by dishesViewModel.categoryChip.collectAsState()
-    val selected by dishesViewModel.select.collectAsState()
-    val dish by dishesViewModel.currentDish.collectAsState()
-    val coroutineScope = rememberCoroutineScope()
-    NavHost(
-        navController = navController,
-        startDestination = NavigationGraph.Main.name,
-    ){
-        composable(route = NavigationGraph.Main.name){
-            MainScreen(
-                viewModel = mainViewModel,
-                navigationToCategories = {
-                    navController.navigate(
-                        route = NavigationGraph.Categories.name
-                    )
+    Scaffold(
+        modifier = modifier,
+        bottomBar = {
+            NavigationRailClub(
+                navigateToMain = {
+                    navController.navigate(route = NavigationGraph.Main.name)
+                },
+                navigateToBasket = {
+                    navController.navigate(route = NavigationGraph.Basket.name)
                 }
             )
         }
-        composable(route = NavigationGraph.Categories.name){
-            DishesScreen(
-                viewModel = dishesViewModel,
-                category = "Азиатская кухня",
-                categories = categories as MutableList<String>,
-                selected = selected as MutableList<Boolean>,
-                navigateUp = {
-                    navController.navigateUp()
-                },
-                navigateToDialog = {
-                    navController.navigate(route = NavigationGraph.DialogDish.name)
-                }
-            )
-        }
-        composable(route = NavigationGraph.DialogDish.name){
-            DishItem(
-                dish = dish,
-                navigateUp = {
-                    navController.navigateUp()
-                },
-                addToBasket = {dish->
-                    coroutineScope.launch {
-                        basketViewModel.saveItem(dish = dish)
+    ) {paddingValues->
+        val categories by dishesViewModel.categoryChip.collectAsState()
+        val selected by dishesViewModel.select.collectAsState()
+        val dish by dishesViewModel.currentDish.collectAsState()
+        val coroutineScope = rememberCoroutineScope()
+        NavHost(
+            navController = navController,
+            startDestination = NavigationGraph.Main.name,
+        ) {
+            composable(route = NavigationGraph.Main.name) {
+                MainScreen(
+                    viewModel = mainViewModel,
+                    navigationToCategories = {
+                        navController.navigate(
+                            route = NavigationGraph.Categories.name
+                        )
+                    },
+                    paddingValues = paddingValues
+                )
+            }
+            composable(route = NavigationGraph.Categories.name) {
+                DishesScreen(
+                    viewModel = dishesViewModel,
+                    category = "Азиатская кухня",
+                    categories = categories as MutableList<String>,
+                    selected = selected as MutableList<Boolean>,
+                    navigateUp = {
+                        navController.navigateUp()
+                    },
+                    navigateToDialog = {
+                        navController.navigate(route = NavigationGraph.DialogDish.name)
+                    },
+
+                )
+            }
+            composable(route = NavigationGraph.DialogDish.name) {
+                DishItem(
+                    dish = dish,
+                    navigateUp = {
+                        navController.navigateUp()
+                    },
+                    addToBasket = { dish ->
+                        coroutineScope.launch {
+                            basketViewModel.saveItem(dish = dish)
+                        }
                     }
-                }
-            )
+                )
+            }
+            composable(route = NavigationGraph.Basket.name){
+
+            }
         }
     }
 }

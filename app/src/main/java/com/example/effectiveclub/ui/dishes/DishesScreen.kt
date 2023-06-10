@@ -22,6 +22,7 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
@@ -42,6 +43,7 @@ import coil.request.ImageRequest
 import com.example.effectiveclub.R
 import com.example.effectiveclub.data.categories.Dish
 import com.example.effectiveclub.data.categories.Dishes
+import com.example.effectiveclub.navrail.NavigationRailClub
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
