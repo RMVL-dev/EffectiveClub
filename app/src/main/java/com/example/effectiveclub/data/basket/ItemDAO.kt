@@ -24,7 +24,7 @@ interface ItemDAO {
     suspend fun deleteAll()
 
     @Query("select * from basket where id = :id")
-    fun getItem(id:Int): Flow<Basket>
+    fun getItem(id:Int = 32): Flow<Basket>
 
     @Query("SELECT * FROM basket ORDER BY name ASC")
     fun getAllBasket(): Flow<List<Basket>>

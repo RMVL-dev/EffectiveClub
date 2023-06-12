@@ -2,6 +2,7 @@ package com.example.effectiveclub.ui.main
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -14,11 +15,20 @@ class MainViewModel(
     val mainNetworkRepository: MainRepository
     ):ViewModel() {
 
-    var mainUistate:MainUIState by mutableStateOf(MainUIState.Loading)
+    var mainUiState:MainUIState by mutableStateOf(MainUIState.Loading)
         private set
 
     var mainIsShowing:Boolean by mutableStateOf(true)
         private set
+
+    var topBarString:String by mutableStateOf("")
+        private set
+
+    fun changeTopBar(name: String){
+        topBarString = name
+    }
+
+
 
     fun changePage(){
         mainIsShowing = !mainIsShowing
@@ -29,7 +39,7 @@ class MainViewModel(
 
     fun getMainList(){
         viewModelScope.launch {
-            mainUistate = try{
+            mainUiState = try{
                 MainUIState.Success(
                     mainNetworkRepository.getMain()
                 )

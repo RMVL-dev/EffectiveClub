@@ -21,6 +21,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.effectiveclub.R
 import com.example.effectiveclub.ui.dishes.DishesFilter
@@ -41,15 +42,14 @@ fun TopBar(
                 Row(
                     modifier = modifier
                         .fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Center,
+                    horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Spacer(modifier = Modifier.weight(1f))
                     Text(
                         text = category,
                         modifier = Modifier
-                            .weight(8f)
-                            .padding(start = 20.dp)
+                            .weight(8f),
+                        textAlign = TextAlign.Center
                     )
                     Image(
                         painter = painterResource(id = R.drawable.user),

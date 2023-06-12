@@ -28,6 +28,10 @@ class DishesViewModel(
     private val _select = MutableStateFlow(mutableListOf(false,false,false,false))
     val select:StateFlow<List<Boolean>> = _select.asStateFlow()
 
+    private var _listOfDishes = MutableStateFlow(mutableListOf<Dish>())
+    val listOfDishes:StateFlow<List<Dish>> = _listOfDishes.asStateFlow()
+
+
     private val _currentDish = MutableStateFlow(Dish(
         id = 1,
         name = "Зеленый салат",
@@ -41,9 +45,19 @@ class DishesViewModel(
 
     init {
         getDishesList()
+        //filtering("Все меню")
         //updateCategoryList((dishesUiState as DishesUIState.Success).dishes.dishes)
     }
 
+    fun filtering(filterTag:String){
+        val dishes = (dishesUiState as DishesUIState.Success).dishes.dishes
+        _listOfDishes.value.clear()
+        for (i in dishes){
+            if (i.tags.contains(filterTag)){
+                _listOfDishes.value.add(i)
+            }
+        }
+    }
     fun updateCurrentDish(dish:Dish){
         _currentDish.update {currentDish ->
             currentDish.copy(

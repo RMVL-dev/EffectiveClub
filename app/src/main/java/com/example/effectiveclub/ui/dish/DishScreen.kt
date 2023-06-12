@@ -10,11 +10,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -36,7 +38,6 @@ import coil.request.ImageRequest
 import com.example.effectiveclub.R
 import com.example.effectiveclub.data.categories.Dish
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun DishItem(
     modifier: Modifier = Modifier,
@@ -44,17 +45,15 @@ fun DishItem(
     navigateUp:()->Unit,
     addToBasket:(dish:Dish)->Unit = {}
 ){
-    Box(modifier = modifier
-        .height(450.dp)
-        .width(350.dp)
-        //.border(2.dp, color = Color.Black)
-    ){
-        Dialog(
-            onDismissRequest = { navigateUp() },
-        ) {
-            (LocalView.current.parent as DialogWindowProvider)?.window?.clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND)
+    Dialog(
+        onDismissRequest = { navigateUp() },
+    ) {
+        Card(modifier = modifier
+            .wrapContentHeight()
+            .width(350.dp)
+        ){
             Column(
-                modifier = modifier,
+                modifier = modifier.padding(8.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Row(
@@ -89,6 +88,7 @@ fun DishItem(
                 dish.description?.let { Text(text = it) }
                 Button(
                     onClick = {
+                        navigateUp()
                         addToBasket(dish)
                               },
                     modifier = Modifier

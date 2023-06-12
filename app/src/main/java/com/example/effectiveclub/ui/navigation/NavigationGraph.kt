@@ -56,7 +56,7 @@ fun EffectiveClubNavigationGraph(
         modifier = modifier,
         topBar = {
             TopBar(
-                category = "Азиатская кухня",
+                category = mainViewModel.topBarString,
                 isShowing = !mainViewModel.mainIsShowing,
                 navigateUp = {
                     mainViewModel.changePage()
@@ -99,7 +99,10 @@ fun EffectiveClubNavigationGraph(
                             route = NavigationGraph.Categories.name
                         )
                     },
-                    paddingValues = paddingValues
+                    paddingValues = paddingValues,
+                    changeNameTopBar = {name ->
+                        mainViewModel.changeTopBar(name = name)
+                    }
                 )
             }
             composable(route = NavigationGraph.Categories.name) {

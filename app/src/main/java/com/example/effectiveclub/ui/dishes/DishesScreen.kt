@@ -116,7 +116,10 @@ fun DishesFilter(
     selected: MutableList<Boolean>,
     viewModel: DishesViewModel
 ){
-    LazyRow(modifier = modifier.fillMaxWidth()){
+    LazyRow(
+        modifier = modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ){
         items(categories){item ->
             FilterChip(
                 modifier = Modifier.padding(start = 5.dp),
@@ -178,6 +181,7 @@ fun DishCard(
                     .crossfade(enable = true)
                     .build(),
                 contentDescription = item.name,
+                error = painterResource(id = R.drawable.image_break),
                 modifier = Modifier.padding(start = 20.dp)
             )
         }

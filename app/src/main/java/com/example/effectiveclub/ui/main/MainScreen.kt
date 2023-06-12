@@ -1,7 +1,6 @@
 package com.example.effectiveclub.ui.main
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -33,7 +32,8 @@ fun MainScreen(
     modifier: Modifier = Modifier,
     viewModel: MainViewModel,
     navigationToCategories:()->Unit,
-    paddingValues: PaddingValues
+    paddingValues: PaddingValues,
+    changeNameTopBar: (String) -> Unit
 ){
     Column(modifier = modifier
         .padding(
@@ -42,11 +42,12 @@ fun MainScreen(
         .fillMaxWidth(),
     ) {
         TopMainBar()
-        when(viewModel.mainUistate){
+        when(viewModel.mainUiState){
             is MainUIState.Success ->{
                 MainList(
-                    itemList = (viewModel.mainUistate as MainUIState.Success).mainlist.categories,
-                    navigationToCategories = {navigationToCategories()}
+                    itemList = (viewModel.mainUiState as MainUIState.Success).mainlist.categories,
+                    navigationToCategories = {navigationToCategories()},
+                    changeNameTopBar = {changeNameTopBar(it)}
                 )
             }
             is MainUIState.Error ->{
@@ -63,7 +64,8 @@ fun MainScreen(
 fun MainList(
     modifier:Modifier = Modifier,
     itemList:List<Categories>,
-    navigationToCategories:()->Unit
+    navigationToCategories:()->Unit,
+    changeNameTopBar:(String) -> Unit
 ){
 
     LazyColumn(
@@ -72,6 +74,7 @@ fun MainList(
     ){
         items(itemList){
             MainCard(item = it) {
+                changeNameTopBar(it.name!!)
                 navigationToCategories()
             }
         }
@@ -119,12 +122,14 @@ fun TopMainBar(
 fun MainCard(
     modifier:Modifier = Modifier,
     item: Categories,
-    onCardClick:() -> Unit
+    onCardClick:() -> Unit,
 ){
 
     Card(
         modifier = modifier.padding(top = dimensionResource(id = R.dimen.padding_between_cards)),
-        onClick = {onCardClick()},
+        onClick = {
+            onCardClick()
+                  },
     ) {
         Box(modifier = modifier) {
             AsyncImage(
