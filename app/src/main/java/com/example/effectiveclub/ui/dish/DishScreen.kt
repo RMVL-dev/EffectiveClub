@@ -1,6 +1,7 @@
 package com.example.effectiveclub.ui.dish
 
 import android.view.WindowManager
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -11,6 +12,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Favorite
@@ -51,53 +53,59 @@ fun DishItem(
         Card(modifier = modifier
             .wrapContentHeight()
             .width(350.dp)
-        ){
-            Column(
-                modifier = modifier.padding(8.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
+        ) {
+            Column {
                 Row(
-                    modifier = modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.End
+                    modifier = modifier.fillMaxWidth()
+                        .background(Color.Transparent),
+                    horizontalArrangement = Arrangement.End,
                 ) {
                     IconButton(onClick = { }) {
                         Icon(imageVector = Icons.Filled.Favorite, contentDescription = "")
                     }
-                    IconButton(onClick = {navigateUp()}) {
+                    IconButton(onClick = { navigateUp() }) {
                         Icon(imageVector = Icons.Filled.Close, contentDescription = "")
                     }
                 }
-                AsyncImage(
-                    model = ImageRequest
-                        .Builder(LocalContext.current)
-                        .data(dish.imageUrl)
-                        .crossfade(enable = true).build(),
-                    contentDescription = dish.name
-                )
-                dish.name?.let {
-                    Text(
-                        text = it,
-                        modifier = modifier.padding(start = 8.dp)
-                    )
-                }
-                Row(modifier = modifier) {
-                    Text(text = "${dish.price} \u20BD")
-                    Text("\u2022")
-                    Text(text = "${dish.weight}г")
-                }
-                dish.description?.let { Text(text = it) }
-                Button(
-                    onClick = {
-                        navigateUp()
-                        addToBasket(dish)
-                              },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(8.dp)
+                LazyColumn(
+                    modifier = modifier.padding(8.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Text(
-                        text = stringResource(id = R.string.add_to_basket)
-                    )
+                    item {
+                        AsyncImage(
+                            modifier = modifier.height(230.dp),
+                            model = ImageRequest
+                                .Builder(LocalContext.current)
+                                .data(dish.imageUrl)
+                                .crossfade(enable = true).build(),
+                            contentDescription = dish.name
+                        )
+                        dish.name?.let {
+                            Text(
+                                text = it,
+                                modifier = modifier.padding(start = 8.dp)
+                            )
+                        }
+                        Row(modifier = modifier) {
+                            Text(text = "${dish.price} \u20BD")
+                            Text("\u2022")
+                            Text(text = "${dish.weight}г")
+                        }
+                        dish.description?.let { Text(text = it) }
+                        Button(
+                            onClick = {
+                                navigateUp()
+                                addToBasket(dish)
+                            },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(8.dp)
+                        ) {
+                            Text(
+                                text = stringResource(id = R.string.add_to_basket)
+                            )
+                        }
+                    }
                 }
             }
         }
